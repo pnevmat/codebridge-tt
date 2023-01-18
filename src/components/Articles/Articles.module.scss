@@ -1,0 +1,20 @@
+.line {
+	padding-bottom: 5px;
+	margin-bottom: 45px;
+	border-bottom: 1px solid #EAEAEA;
+	text-align: left;
+}
+
+.lineText {
+	font-family: 'Montserrat';
+	font-style: normal;
+	font-weight: 600;
+	font-size: 16px;
+	line-height: 20px;
+}
+
+.articlesContainer {
+	display: inline-grid;
+	grid-template-columns: repeat(3, 400px);
+	grid-gap: 45px;
+}

@@ -1,4 +1,6 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
+import requests from './utils/apiRequests';
+
 import Filter from './components/Filter/Filter';
 import Articles from './components/Articles/Articles';
 import ArticlePage from './components/ArticlePage/ArticlePage';
@@ -9,32 +11,19 @@ function App() {
   const [filterChange, setFilterchange] = useState<string>('');
   const [clickedCard, setClickedCard] = useState<card | null>(null);
 
-  const cards: Array<card> = [
-    {
-      id: '1',
-      image: 'www.google.com',
-      date: '15.01.2023',
-      title: 'Some title',
-      description: 'Description of article',
-    },
-  ];
-  const foundCards = cards.filter(
-    (card) =>
-      card.title.toLowerCase().includes(filterChange.toLowerCase()) ||
-      card.description.toLowerCase().includes(filterChange.toLowerCase()),
-  );
+  requests.getArticles({
+    type: 'get',
+    path: '/v3/articles',
+    params: null,
+  });
+
   return (
-    <div className="container">
+    <div>
       {!clickedCard ? (
-        <div>
+        <div className="container">
           <Filter setFilterchange={setFilterchange} />
-          <div className="line">
-            <span className="lineText">
-              Results: {foundCards.length ? foundCards.length : 0}
-            </span>
-          </div>
           <Articles
-            cards={foundCards.length ? foundCards : cards}
+            filterChange={filterChange}
             setClickedCard={setClickedCard}
           />
         </div>

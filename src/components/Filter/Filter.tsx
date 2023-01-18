@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import {FC} from 'react';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import styles from './Filter.module.scss';
 

@@ -1,7 +1,8 @@
 export interface card {
-  id: string;
-  image: string;
-  date: string;
-  title: string;
-  description: string;
+	id: number
+	imageUrl: string
+	publishedAt: string
+	summary: string
+	title: string
+	url: string
 }
