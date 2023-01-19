@@ -36,8 +36,12 @@ const Card: FC<CardProps> = ({card, setClickedCard}) => {
           <CalendarTodayOutlinedIcon />
           <span className={styles.date}>{shortenedCard.publishedAt}</span>
         </div>
-        <h3 className={styles.title}>{card.title}</h3>
-        <p className={styles.description}>{shortenedCard.summary}</p>
+        <h3 className={styles.title} id="3">
+          {card.title}
+        </h3>
+        <p className={styles.description} id="3">
+          {shortenedCard.summary}
+        </p>
         <button
           className={styles.readMoreBtn}
           onClick={() => setClickedCard(card)}>

@@ -12,7 +12,10 @@ const ArticlePage: FC<ArticlePageProps> = ({card, setClickedCard}) => {
   return (
     <div className={styles.container}>
       <div>
-        <img className={styles.image} src={card?.imageUrl} alt="" />
+        <div
+          className={styles.image}
+          style={{backgroundImage: `url(${card?.imageUrl})`}}
+        />
       </div>
       <div className={styles.articleContainer}>
         <h3 className={styles.title}>{card?.title}</h3>

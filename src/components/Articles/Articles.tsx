@@ -1,6 +1,7 @@
 import {FC} from 'react';
 import {useStore} from '../../redux/store';
 import Card from '../Card/Card';
+import chooseCards from '../../utils/chooseCards';
 import {card} from '../../utils/types';
 import styles from './Articles.module.scss';
 
@@ -12,11 +13,23 @@ interface ArticlesProps {
 const Articles: FC<ArticlesProps> = ({filterChange, setClickedCard}) => {
   const {articles: cards} = useStore();
 
-  const foundCards = cards.filter(
-    (card: card) =>
-      card.title.toLowerCase().includes(filterChange.toLowerCase()) ||
-      card.summary.toLowerCase().includes(filterChange.toLowerCase()),
+  const machedInTitle = chooseCards(cards, filterChange.split(' '), 'title');
+
+  const machedInSummary = chooseCards(
+    cards,
+    filterChange.split(' '),
+    'summary',
   );
+
+  const foundCards = [
+    ...machedInTitle,
+    ...machedInSummary.filter(
+      (card: card) => !machedInTitle.includes(card as never),
+    ),
+  ];
+
+  const elementToHighlight = document.getElementById('3');
+  console.log('Element to highlight: ', elementToHighlight);
   return (
     <div>
       <div className={styles.line}>
