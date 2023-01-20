@@ -38,13 +38,15 @@ const Articles: FC<ArticlesProps> = ({filterChange, setClickedCard}) => {
     ),
   ];
 
+  const hilightIds: Array<string> = [];
   if (foundCards.length) {
-    const hilightIds: Array<string> = [];
     foundCards.forEach((foundCard) => {
       hilightIds.push(foundCard.titleId);
       hilightIds.push(foundCard.summaryId);
     });
     highlightor(hilightIds, ['#ff6'], null).apply(filterChange);
+  } else {
+    highlightor(hilightIds, ['#ff6'], null).remove();
   }
 
   return (

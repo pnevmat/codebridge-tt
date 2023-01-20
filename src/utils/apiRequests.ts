@@ -8,10 +8,11 @@ interface useRequestArgs {
 }
 
 const API_URL = 'https://api.spaceflightnewsapi.net/'
-const requests = {getArticles: ({type, path, params}: useRequestArgs) => {
-	const $api = axios.create({
-		baseURL: API_URL,
-	});
+const requests = {
+	getArticles: ({type, path, params}: useRequestArgs) => {
+		const $api = axios.create({
+			baseURL: API_URL,
+		});
 	
 		if (!params) {
 			switch (type) {
