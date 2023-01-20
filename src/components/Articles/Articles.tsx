@@ -2,21 +2,31 @@ import {FC} from 'react';
 import {useStore} from '../../redux/store';
 import Card from '../Card/Card';
 import chooseCards from '../../utils/chooseCards';
-import {card} from '../../utils/types';
+import highlightor from '../../utils/highlightor';
+import {hilightedCard} from '../../utils/types';
 import styles from './Articles.module.scss';
 
 interface ArticlesProps {
   filterChange: string;
-  setClickedCard: (card: card) => void;
+  setClickedCard: (card: hilightedCard) => void;
 }
 
 const Articles: FC<ArticlesProps> = ({filterChange, setClickedCard}) => {
   const {articles: cards} = useStore();
+  const hilightedCards = cards.map((card) => ({
+    ...card,
+    titleId: `title-${card.id}`,
+    summaryId: `summary-${card.id}`,
+  }));
 
-  const machedInTitle = chooseCards(cards, filterChange.split(' '), 'title');
+  const machedInTitle = chooseCards(
+    hilightedCards,
+    filterChange.split(' '),
+    'title',
+  );
 
   const machedInSummary = chooseCards(
-    cards,
+    hilightedCards,
     filterChange.split(' '),
     'summary',
   );
@@ -24,12 +34,19 @@ const Articles: FC<ArticlesProps> = ({filterChange, setClickedCard}) => {
   const foundCards = [
     ...machedInTitle,
     ...machedInSummary.filter(
-      (card: card) => !machedInTitle.includes(card as never),
+      (card: hilightedCard) => !machedInTitle.includes(card as never),
     ),
   ];
 
-  const elementToHighlight = document.getElementById('3');
-  console.log('Element to highlight: ', elementToHighlight);
+  if (foundCards.length) {
+    const hilightIds: Array<string> = [];
+    foundCards.forEach((foundCard) => {
+      hilightIds.push(foundCard.titleId);
+      hilightIds.push(foundCard.summaryId);
+    });
+    highlightor(hilightIds, ['#ff6'], null).apply(filterChange);
+  }
+
   return (
     <div>
       <div className={styles.line}>
@@ -42,7 +59,7 @@ const Articles: FC<ArticlesProps> = ({filterChange, setClickedCard}) => {
           ? foundCards.map((card) => (
               <Card key={card.id} card={card} setClickedCard={setClickedCard} />
             ))
-          : cards.map((card) => (
+          : hilightedCards.map((card) => (
               <Card key={card.id} card={card} setClickedCard={setClickedCard} />
             ))}
       </div>

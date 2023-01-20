@@ -1,144 +1,171 @@
-// // Original JavaScript code by Chirp Internet: chirpinternet.eu
-// // Please acknowledge use of this code by including this header.
+// Original JavaScript code by Chirp Internet: chirpinternet.eu
+// Please acknowledge use of this code by including this header.
 
-// export default function Hilitor(id, tag) {
+interface highlightorReturnObjectType {
+	targetNodes: Array<Node>;
+	hiliteTag: string;
+	skipTags: RegExp;
+	colors: Array<string>;
+	wordColor: Array<string> | [];
+	colorIdx: number;
+	matchRegExp: RegExp | string;
+	openLeft: boolean;
+	openRight: boolean;
+	endRegExp: RegExp;
+	breakRegExp: RegExp;
+	setEndRegExp: (regex: RegExp) => void;
+	setBreakRegExp: (regex: RegExp) => void;
+	setMatchType: (type: string) => void;
+	setRegex: (input: string) => RegExp | false;
+	getRegex: () => void;
+	hiliteWords: (node: any) => void;
+	remove: () => void;
+	apply: (input: any) => void;
+}
 
-//   // private variables
-//   var targetNode = document.getElementById(id) || document.body;
-//   var hiliteTag = tag || "MARK";
-//   var skipTags = new RegExp("^(?:" + hiliteTag + "|SCRIPT|FORM|SPAN)$");
-//   var colors = ["#ff6", "#a0ffff", "#9f9", "#f99", "#f6f"];
-//   var wordColor = [];
-//   var colorIdx = 0;
-//   var matchRegExp = "";
-//   var openLeft = false;
-//   var openRight = false;
+const Hilitor = (ids: Array<string>, hilightingColors: Array<string>, tag: string | null) => {
 
-//   // characters to strip from start and end of the input string
-//   var endRegExp = new RegExp('^[^\\w]+|[^\\w]+$', "g");
+  // private variables
+  const hilightObj = ({
+		targetNodes: ids.map(id => document.getElementById(id) || document.body),
+  	hiliteTag: tag || "MARK",
+  	skipTags: new RegExp(""),
+  	colors: hilightingColors,
+  	wordColor: [],
+  	colorIdx: 0,
+  	matchRegExp: "",
+  	openLeft: false,
+  	openRight: false,
 
-//   // characters used to break up the input string into words
-//   var breakRegExp = new RegExp('[^\\w\'-]+', "g");
+  	// characters to strip from start and end of the input string
+  	endRegExp: new RegExp('^[^\\w]+|[^\\w]+$', "g"),
 
-//   this.setEndRegExp = function(regex) {
-//     endRegExp = regex;
-//     return endRegExp;
-//   };
+  	// characters used to break up the input string into words
+  	breakRegExp: new RegExp('[^\\w\'-]+', "g"),
+		
+  	setEndRegExp: function(regex: any) {
+  	  this.endRegExp = regex;
+  	  return this.endRegExp;
+  	},
 
-//   this.setBreakRegExp = function(regex) {
-//     breakRegExp = regex;
-//     return breakRegExp;
-//   };
+  	setBreakRegExp: function(regex: any) {
+  	  this.breakRegExp = regex;
+  	  return this.breakRegExp;
+  	},
 
-//   this.setMatchType = function(type)
-//   {
-//     switch(type)
-//     {
-//       case "left":
-//         this.openLeft = false;
-//         this.openRight = true;
-//         break;
+  	setMatchType: function(type: string)
+  	{
+  	  switch(type)
+  	  {
+  	    case "left":
+  	      this.openLeft = false;
+  	      this.openRight = true;
+  	      break;
 
-//       case "right":
-//         this.openLeft = true;
-//         this.openRight = false;
-//         break;
+  	    case "right":
+  	      this.openLeft = true;
+  	      this.openRight = false;
+  	      break;
 
-//       case "open":
-//         this.openLeft = this.openRight = true;
-//         break;
+  	    case "open":
+  	      this.openLeft = this.openRight = true;
+  	      break;
 
-//       default:
-//         this.openLeft = this.openRight = false;
+  	    default:
+  	      this.openLeft = this.openRight = false;
 
-//     }
-//   };
+  	  }
+  	},
 
-//   this.setRegex = function(input)
-//   {
-//     input = input.replace(endRegExp, "");
-//     input = input.replace(breakRegExp, "|");
-//     input = input.replace(/^\||\|$/g, "");
-//     if(input) {
-//       var re = "(" + input + ")";
-//       if(!this.openLeft) {
-//         re = "\\b" + re;
-//       }
-//       if(!this.openRight) {
-//         re = re + "\\b";
-//       }
-//       matchRegExp = new RegExp(re, "i");
-//       return matchRegExp;
-//     }
-//     return false;
-//   };
+  	setRegex: function(input: string)
+  	{
+  	  input = input.replace(this.endRegExp, "");
+  	  input = input.replace(this.breakRegExp, "|");
+  	  input = input.replace(/^\||\|$/g, "");
+  	  if(input) {
+  	    let re = "(" + input + ")";
+  	    if(!this.openLeft) {
+  	      re = "\\b" + re;
+  	    }
+  	    if(!this.openRight) {
+  	      re = re + "\\b";
+  	    }
+  	    this.matchRegExp = new RegExp(re, "i");
+  	    return this.matchRegExp;
+  	  }
+  	  return false;
+  	},
 
-//   this.getRegex = function()
-//   {
-//     var retval = matchRegExp.toString();
-//     retval = retval.replace(/(^\/(\\b)?|\(|\)|(\\b)?\/i$)/g, "");
-//     retval = retval.replace(/\|/g, " ");
-//     return retval;
-//   };
+  	getRegex: function()
+  	{
+  	  let retval = this.matchRegExp.toString();
+  	  retval = retval.replace(/(^\/(\\b)?|\(|\)|(\\b)?\/i$)/g, "");
+  	  retval = retval.replace(/\|/g, " ");
+  	  return retval;
+  	},
 
-//   // recursively apply word highlighting
-//   this.hiliteWords = function(node)
-//   {
-//     if(node === undefined || !node) return;
-//     if(!matchRegExp) return;
-//     if(skipTags.test(node.nodeName)) return;
+  	// recursively apply word highlighting
+  	hiliteWords: function(node: any) {
+  	  if(node === undefined || !node) return;
+  	  if(!this.matchRegExp) return;
+  	  if(this.skipTags.test(node.nodeName)) return;
 
-//     if(node.hasChildNodes()) {
-//       for(var i=0; i < node.childNodes.length; i++)
-//         this.hiliteWords(node.childNodes[i]);
-//     }
-//     if(node.nodeType == 3) { // NODE_TEXT
+  	  if(node.hasChildNodes()) {
+  	    for(var i=0; i < node.childNodes.length; i++)
+  	      this.hiliteWords(node.childNodes[i]);
+  	  }
+  	  if(node.nodeType === 3) { // NODE_TEXT
 
-//       var nv, regs;
+  	    let nv = node.nodeValue
+				let regs = (this.matchRegExp as RegExp).exec(nv);
 
-//       if((nv = node.nodeValue) && (regs = matchRegExp.exec(nv))) {
+  	    if(nv && regs) {
 
-//         if(!wordColor[regs[0].toLowerCase()]) {
-//           wordColor[regs[0].toLowerCase()] = colors[colorIdx++ % colors.length];
-//         }
+  	      if(!this.wordColor[(regs[0] as any).toLowerCase()]) {
+  	        this.wordColor[(regs[0] as any).toLowerCase()] = this.colors[this.colorIdx++ % this.colors.length];
+  	      }
 
-//         var match = document.createElement(hiliteTag);
-//         match.appendChild(document.createTextNode(regs[0]));
-//         match.style.backgroundColor = wordColor[regs[0].toLowerCase()];
-//         match.style.color = "#000";
+  	      let match = document.createElement(this.hiliteTag);
+  	      match.appendChild(document.createTextNode(regs[0]));
+  	      match.style.backgroundColor = this.wordColor[(regs[0] as any).toLowerCase()];
+  	      match.style.color = "#000";
 
-//         var after = node.splitText(regs.index);
-//         after.nodeValue = after.nodeValue.substring(regs[0].length);
-//         node.parentNode.insertBefore(match, after);
+  	      let after = node.splitText(regs.index);
+  	      after.nodeValue = after.nodeValue.substring(regs[0].length);
+  	      node.parentNode.insertBefore(match, after);
 
-//       }
-//     }
-//   };
+  	    }
+  	  }
+  	},
 
-//   // remove highlighting
-//   this.remove = function()
-//   {
-//     var arr = document.getElementsByTagName(hiliteTag), el;
-//     while(arr.length && (el = arr[0])) {
-//       var parent = el.parentNode;
-//       parent.replaceChild(el.firstChild, el);
-//       parent.normalize();
-//     }
-//   };
+  	// remove highlighting
+  	remove: function()
+  	{
+  	  let arr = document.getElementsByTagName(this.hiliteTag), el;
+  	  while(arr.length && (el = arr[0])) {
+  	    let parent = el.parentNode;
+  	    parent?.replaceChild((el.firstChild as Node), el);
+  	    parent?.normalize();
+  	  }
+  	},
 
-//   // start highlighting at target node
-//   this.apply = function(input)
-//   {
-//     this.remove();
-//     if(input === undefined || !(input = input.replace(/(^\s+|\s+$)/g, ""))) {
-//       return;
-//     }
-//     if(this.setRegex(input)) {
-//       this.hiliteWords(targetNode);
-//     }
-//     return matchRegExp;
-//   };
+  	// start highlighting at target node
+  	apply: function(input: any)
+  	{
+  	  this.remove();
+  	  if(input === undefined || !(input = input.replace(/(^\s+|\s+$)/g, ""))) {
+  	    return;
+  	  }
+  	  if(this.setRegex(input)) {
+  	    this.targetNodes.forEach(targetNode => this.hiliteWords(targetNode));
+  	  }
+  	  return this.matchRegExp;
+  	}
+	} as highlightorReturnObjectType);
 
-// }
+	hilightObj.skipTags = new RegExp("^(?:" + hilightObj.hiliteTag + "|SCRIPT|FORM|SPAN)$")
 
-export {}
+	return hilightObj
+}
+
+export default Hilitor

@@ -4,12 +4,12 @@ import requests from './utils/apiRequests';
 import Filter from './components/Filter/Filter';
 import Articles from './components/Articles/Articles';
 import ArticlePage from './components/ArticlePage/ArticlePage';
-import {card} from './utils/types';
+import {hilightedCard} from './utils/types';
 import './App.scss';
 
 function App() {
   const [filterChange, setFilterchange] = useState<string>('');
-  const [clickedCard, setClickedCard] = useState<card | null>(null);
+  const [clickedCard, setClickedCard] = useState<hilightedCard | null>(null);
 
   requests.getArticles({
     type: 'get',
