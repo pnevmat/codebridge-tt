@@ -13,17 +13,9 @@
 }
 
 .articleContainer {
-	position: relative;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -40%);
 	display: inline-block;
 	width: 100%;
-	max-width: 1290px;
 	padding-top: 35px;
-	padding-right: 75px;
-	padding-bottom: 50px;
-	padding-left: 75px;
 	border: 1px solid #EAEAEA;
 	border-radius: 5px;
 	background: #FFFFFF;
@@ -45,11 +37,6 @@
 	font-weight: 400;
 	font-size: 18px;
 	line-height: 27px;
-}
-
-.btnWrapper {
-	padding-left: 16vw;
-	text-align: left;
 }
 
 .homeBtn {
@@ -79,4 +66,94 @@
 	font-weight: 700;
 	font-size: 16px;
 	line-height: 24px;
+}
+
+@media screen and (max-width: 767px) {
+	.container {
+		text-align: center;
+	}
+
+	.articleContainer {
+		max-width: 80vw;
+		padding-right: 25px;
+		padding-bottom: 35px;
+		padding-left: 25px;
+		margin-bottom: 20px;
+	}
+}
+
+@media screen and (max-width: 767px) {
+	.btnWrapper {
+		text-align: center;
+	}	
+}
+
+@media screen and (min-width: 768px) {
+	.articleContainer {
+		position: relative;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -40%);
+		padding-right: 75px;
+		padding-bottom: 50px;
+		padding-left: 75px;
+	}
+
+	.btnWrapper {
+		text-align: left;
+	}	
+}
+
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+	.articleContainer {
+		max-width: 500px;
+	}
+}
+
+@media screen and (min-width: 1024px) and (max-width: 1069px) {
+	.articleContainer {
+		max-width: 700px;
+	}
+}
+
+@media screen and (min-width: 768px) and (max-width: 1279px) {
+	.btnWrapper {
+		padding-left: 18vw;
+	}
+}
+
+@media screen and (min-width: 1070px) and (max-width: 1669px) {
+	.articleContainer {
+		max-width: 880px;
+	}
+}
+
+@media screen and (min-width: 1280px) and (max-width: 1359px) {
+	.btnWrapper {
+		padding-left: 16vw;
+	}
+}
+
+@media screen and (min-width: 1360px) and (max-width: 1669px) {
+	.btnWrapper {
+		padding-left: 17vw;
+	}
+}
+
+@media screen and (min-width: 1700px) {
+	.articleContainer {
+		max-width: 1290px;
+	}
+}
+
+@media screen and (min-width: 1700px) and (max-width: 1799px) {
+	.btnWrapper {
+		padding-left: 12vw;
+	}
+}
+
+@media screen and (min-width: 1800px) {
+	.btnWrapper {
+		padding-left: 16vw;
+	}
 }

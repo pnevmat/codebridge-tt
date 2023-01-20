@@ -1,6 +1,5 @@
 .container {
 	max-width: 400px;
-	max-height: 530px;
 	border: 1px solid #EAEAEA;
 	border-radius: 5px;
 	background: #FFFFFF;
@@ -14,7 +13,6 @@
 .image {
 	width: 100%;
 	max-width: 400px;
-	height: 217px;
 	border-top-right-radius: 5px;
 	border-top-left-radius: 5px;
 }
@@ -43,7 +41,6 @@
 }
 
 .title {
-	height: 81px;
 	margin-top: 0;
 	margin-bottom: 20px;
 	font-family: 'Montserrat';
@@ -54,7 +51,6 @@
 }
 
 .description {
-	height: 75px;
 	margin-top: 0;
 	font-family: 'Montserrat';
 	font-style: normal;
@@ -90,4 +86,41 @@
 
 .readMoreBtn:hover {
 	cursor: pointer;
+}
+
+@media screen and (max-width: 767px) {
+	.container {
+		margin-bottom: 25px;
+	}
+}
+
+@media screen and (min-width: 768px) {
+	.container {
+		max-height: 530px;
+	}
+
+	.image {
+		height: 217px;
+	}
+
+	.title {
+		height: 81px;
+	}
+
+	.description {
+		height: 75px;
+	}
+}
+
+@media screen and (max-width: 1023px) {
+	.container {
+		display: inline-block;
+		text-align: left;
+	}
+}
+
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+	.container {
+		margin-bottom: 45px;
+	}
 }
